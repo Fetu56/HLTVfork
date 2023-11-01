@@ -67,6 +67,34 @@ export interface FullPlayerStats {
     grenadeKills: number
     otherKills: number
   }
+  additionalInfo:
+  {
+    kast?: number
+    impact?: number
+    featuredRating?:
+    {
+      vsTop5?:{
+        rating: number
+        maps: number
+      }
+      vsTop10?:{
+        rating: number
+        maps: number
+      }
+      vsTop20?:{
+        rating: number
+        maps: number
+      }
+      vsTop30?:{
+        rating: number
+        maps: number
+      }
+      vsTop50?:{
+        rating: number
+        maps: number
+      }
+    }
+  }
 }
 
 export interface GetPlayerStatsArguments {
@@ -175,6 +203,40 @@ export const getPlayerStats =
         : { rating2: getOverviewStats('Rating 2.0') })
     }
 
+    const getAdditionalInfoHeader = (label: string): number | undefined => {
+      const lbl = label.toLowerCase()
+      const row = $('.summaryStatBreakdown .aboveAverage').filter((_, x) =>
+        x.text().toLowerCase().includes(lbl)
+      )
+      if (row.exists()) {
+        return Number(row.find('summaryStatBreakdownDataValue').eq(1).text().replace('%', ''))
+      }
+    }
+
+    const getAdditionalInfoSubRatings = (label: string): { rating: number; maps: number; } | undefined => {
+      const lbl = label.toLowerCase()
+      const row = $('.g-grid .col-custom').filter((_, x) =>
+        x.text().toLowerCase().includes(lbl)
+      )
+      if (row.exists()) {
+        return {rating: Number(row.find('rating-value').eq(1).text().replace('%', '')), maps: Number(row.find('rating-maps').eq(1).text().substring(1,4))}
+      }
+    }
+
+
+    const additionalInfo = {
+      kast: getAdditionalInfoHeader('KAST'),
+      impact: getAdditionalInfoHeader('IMPACT'),
+      featuredRating:
+      {
+        vsTop5: getAdditionalInfoSubRatings('vs top 5 opponents'),
+        vsTop10: getAdditionalInfoSubRatings('vs top 10 opponents'),
+        vsTop20: getAdditionalInfoSubRatings('vs top 20 opponents'),
+        vsTop30: getAdditionalInfoSubRatings('vs top 30 opponents'),
+        vsTop50: getAdditionalInfoSubRatings('vs top 50 opponents')
+      }
+    }
+
     const getIndivialStats = (label: string): number => {
       const lbl = label.toLowerCase()
       const row = i$('.stats-row').filter((_, x) =>
@@ -257,6 +319,7 @@ export const getPlayerStats =
       team,
       overviewStatistics,
       individualStatistics,
-      matches
+      matches,
+      additionalInfo
     }
   }

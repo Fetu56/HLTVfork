@@ -205,11 +205,11 @@ export const getPlayerStats =
 
     const getAdditionalInfoHeader = (label: string): number | undefined => {
       const lbl = label.toLowerCase()
-      const row = $('.summaryStatBreakdown .aboveAverage').filter((_, x) =>
+      const row = $('.summaryStatBreakdown').filter((_, x) =>
         x.text().toLowerCase().includes(lbl)
       )
       if (row.exists()) {
-        return Number(row.find('summaryStatBreakdownDataValue').eq(1).text().replace('%', ''))
+        return Number(row.find('.summaryStatBreakdownDataValue').text().replace('%', ''))
       }
     }
 
@@ -219,7 +219,7 @@ export const getPlayerStats =
         x.text().toLowerCase().includes(lbl)
       )
       if (row.exists()) {
-        return {rating: Number(row.find('rating-value').eq(1).text().replace('%', '')), maps: Number(row.find('rating-maps').eq(1).text().substring(1,4))}
+        return {rating: Number(row.find('.rating-value').text().replace('%', '')), maps: Number(row.find('.rating-maps').text().substring(1,4))}
       }
     }
 

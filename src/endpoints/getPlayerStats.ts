@@ -215,7 +215,7 @@ export const getPlayerStats =
 
     const getAdditionalInfoSubRatings = (label: string): { rating: number; maps: number; } | undefined => {
       const lbl = label.toLowerCase()
-      const row = $('.g-grid .col-custom').filter((_, x) =>
+      const row = $('.col-custom').filter((_, x) =>
         x.text().toLowerCase().includes(lbl)
       )
       if (row.exists()) {

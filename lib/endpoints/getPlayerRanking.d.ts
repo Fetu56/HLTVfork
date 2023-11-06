@@ -14,10 +14,7 @@ export interface PlayerRanking {
     kd: number;
     rating1?: number;
     rating2?: number;
-    clutches?: {
-        ign: string;
-        clutches: number;
-    };
+    clutches?: number;
 }
 export interface GetPlayerRankingOptions {
     startDate?: string;

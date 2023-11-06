@@ -18,6 +18,7 @@ export interface PlayerRanking {
   kd: number
   rating1?: number
   rating2?: number
+  clutches?: {ign: string, clutches: number}[]
 }
 
 export interface GetPlayerRankingOptions {
@@ -54,6 +55,24 @@ export const getPlayerRanking =
       )
     )
 
+    const с$ = HLTVScraper(
+      await fetchPage(
+        `https://www.hltv.org/stats/leaderboards/clutch/clutches-1vsx-won?${query}`,
+        config.loadPage
+      )
+    )
+
+    const clutches = с$('.leader')
+      .toArray()
+      .map((el) => {
+        const ign = el.find('leader-name').find('a').text()
+        const clutch = el.find('.leader-rating').find('span').numFromText()!
+        return {
+          ign: ign,
+          clutches: clutch
+        }
+      })
+
     return $('.player-ratings-table tbody tr')
       .toArray()
       .map((el) => {
@@ -84,7 +103,8 @@ export const getPlayerRanking =
           kd,
           ...($('.ratingCol .ratingDesc').text() === '2.0'
             ? { rating2: rating }
-            : { rating1: rating })
+            : { rating1: rating }),
+          clutches
         }
       })
   }

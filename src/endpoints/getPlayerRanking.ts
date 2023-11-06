@@ -18,7 +18,7 @@ export interface PlayerRanking {
   kd: number
   rating1?: number
   rating2?: number
-  clutches?: {ign: string, clutches: number}[]
+  clutches?: { ign: string; clutches: number }
 }
 
 export interface GetPlayerRankingOptions {
@@ -62,11 +62,11 @@ export const getPlayerRanking =
       )
     )
 
-    const clutches = с$('.leader')
+    const clutchesAll = с$('.leader')
       .toArray()
       .map((el) => {
-        const ign = el.find('leader-name').find('a').text()
-        const clutch = el.find('.leader-rating').find('span').numFromText()!
+        const ign = el.find('.leader-name a').text()
+        const clutch = el.find('.leader-rating span').numFromText()!
         return {
           ign: ign,
           clutches: clutch
@@ -93,7 +93,7 @@ export const getPlayerRanking =
         const kdDiff = el.find('td.kdDiffCol').numFromText()!
         const kd = el.find('td.statsDetail').eq(2).numFromText()!
         const rating = el.find('td.ratingCol').numFromText()!
-
+        const clutches = clutchesAll.find((cl) => cl.ign === name)
         return {
           player,
           teams,
